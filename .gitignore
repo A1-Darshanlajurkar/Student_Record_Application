@@ -4,4 +4,8 @@
 *.user
 *.suo
 .idea/
+*.iml
+.settings/
+.classpath
+.project
 *.log
