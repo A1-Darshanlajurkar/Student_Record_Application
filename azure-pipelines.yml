@@ -75,5 +75,5 @@ stages:
       inputs:
         azureSubscription: Azure-Connection
         appType: webAppLinux
-        appName: StudentRecord-WebApp-Backend
+        appName: Student-Backed-web-app
         package: $(System.ArtifactsDirectory)/backend-drop/*.zip
