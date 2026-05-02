@@ -18,29 +18,33 @@ stages:
   displayName: Build Backend
   jobs:
   - job: BuildJob
+    pool:
+      vmImage: ubuntu-latest
     steps:
     - task: UseDotNet@2
+      displayName: Install .NET 8 SDK
       inputs:
         packageType: sdk
-        version: 8.x
+        version: '8.0.x'
 
     - task: DotNetCoreCLI@2
-      displayName: Restore
+      displayName: Restore NuGet Packages
       inputs:
         command: restore
         projects: $(projectPath)
 
     - task: DotNetCoreCLI@2
-      displayName: Build
+      displayName: Build Project
       inputs:
         command: build
         projects: $(projectPath)
         arguments: --configuration $(buildConfiguration)
 
     - task: DotNetCoreCLI@2
-      displayName: Publish
+      displayName: Publish Project
       inputs:
         command: publish
+        publishWebProjects: false
         projects: $(projectPath)
         arguments: --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
         zipAfterPublish: true
@@ -56,9 +60,13 @@ stages:
   dependsOn: Build
   jobs:
   - job: DeployJob
+    pool:
+      vmImage: ubuntu-latest
     steps:
     - task: DownloadBuildArtifacts@1
+      displayName: Download Artifact
       inputs:
+        buildType: current
         artifactName: backend-drop
         downloadPath: $(System.ArtifactsDirectory)
 
